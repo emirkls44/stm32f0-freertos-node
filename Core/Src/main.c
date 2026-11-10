@@ -330,7 +330,7 @@ void StartBlueTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  if (osMessageQueueGet(ButtonQueueHandle, &msg, NULL, 0)==osOK) {
+	  if (osMessageQueueGet(ButtonQueueHandle, &msg, NULL, period)==osOK) {
 
 		  if (period ==500 ) {
 			period=100;
@@ -339,9 +339,9 @@ void StartBlueTask(void *argument)
 			period=500;
 			log_msg("Blue: slow\r\n");
 		}
+	}else {
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
 	}
-	  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
-	  osDelay(period);
 
   }
   /* USER CODE END 5 */
