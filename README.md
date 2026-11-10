@@ -10,11 +10,12 @@ https://github.com/user-attachments/assets/63c24105-79e1-4d38-89f9-491e368dc773
 
 Button changes the blue LED speed:
 
-https://github.com/user-attachments/assets/b0cc3083-8f6b-40b3-a4e5-8d43feea3aa2
+https://github.com/user-attachments/assets/d61a8b3f-1d2f-46fa-97d3-efaa347d8297
+
 
 UART log in the serial terminal:
 
-https://github.com/user-attachments/assets/d61a8b3f-1d2f-46fa-97d3-efaa347d8297
+https://github.com/user-attachments/assets/b0cc3083-8f6b-40b3-a4e5-8d43feea3aa2
 
 ## What it does
 
