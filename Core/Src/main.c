@@ -55,6 +55,18 @@ const osThreadAttr_t GreenTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for ButtonTask */
+osThreadId_t ButtonTaskHandle;
+const osThreadAttr_t ButtonTask_attributes = {
+  .name = "ButtonTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityAboveNormal,
+};
+/* Definitions for ButtonQueue */
+osMessageQueueId_t ButtonQueueHandle;
+const osMessageQueueAttr_t ButtonQueue_attributes = {
+  .name = "ButtonQueue"
+};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -64,6 +76,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 void StartBlueTask(void *argument);
 void StartGreenTask(void *argument);
+void StartButtonTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -122,6 +135,10 @@ int main(void)
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of ButtonQueue */
+  ButtonQueueHandle = osMessageQueueNew (4, sizeof(uint8_t), &ButtonQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -132,6 +149,9 @@ int main(void)
 
   /* creation of GreenTask */
   GreenTaskHandle = osThreadNew(StartGreenTask, NULL, &GreenTask_attributes);
+
+  /* creation of ButtonTask */
+  ButtonTaskHandle = osThreadNew(StartButtonTask, NULL, &ButtonTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -246,11 +266,19 @@ static void MX_GPIO_Init(void)
 void StartBlueTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
+	uint32_t period = 500;
+	uint8_t msg;
   /* Infinite loop */
   for(;;)
   {
+	  if (osMessageQueueGet(ButtonQueueHandle, &msg, NULL, 0)==osOK) {
+
+		  period = (period == 500) ? 100 : 500;
+	}
 	  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
-	  osDelay(500);
+	  osDelay(period);
+
+
   }
   /* USER CODE END 5 */
 }
@@ -272,6 +300,35 @@ void StartGreenTask(void *argument)
 	  osDelay(200);
   }
   /* USER CODE END StartGreenTask */
+}
+
+/* USER CODE BEGIN Header_StartButtonTask */
+/**
+* @brief Function implementing the ButtonTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartButtonTask */
+void StartButtonTask(void *argument)
+{
+  /* USER CODE BEGIN StartButtonTask */
+	uint8_t onceki = 0;
+  /* Infinite loop */
+  for(;;)
+  {
+
+	   uint8_t simdi = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+
+	    if (simdi == 1 && onceki == 0)
+	    {
+	      uint8_t msg = 1;
+	      osMessageQueuePut(ButtonQueueHandle, &msg, 0, 0);
+	    }
+
+	    onceki = simdi;
+	    osDelay(20);
+  }
+  /* USER CODE END StartButtonTask */
 }
 
 /**
