@@ -2,7 +2,19 @@
 
 FreeRTOS project on the STM32F0 Discovery board. Two LEDs blink at different speeds in separate tasks. Pressing the user button changes the speed of the blue LED, and every event is logged over UART.
 
-![demo](docs/demo.gif)
+## Demo
+
+Two tasks blinking at different speeds:
+
+https://github.com/user-attachments/assets/63c24105-79e1-4d38-89f9-491e368dc773
+
+Button changes the blue LED speed:
+
+https://github.com/user-attachments/assets/b0cc3083-8f6b-40b3-a4e5-8d43feea3aa2
+
+UART log in the serial terminal:
+
+https://github.com/user-attachments/assets/d61a8b3f-1d2f-46fa-97d3-efaa347d8297
 
 ## What it does
 
